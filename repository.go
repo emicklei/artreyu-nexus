@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os/exec"
 	"path/filepath"
 
@@ -10,12 +9,12 @@ import (
 )
 
 type Repository struct {
-	osname string
-	config model.RepositoryConfig
+	settings *model.Settings
+	config   model.RepositoryConfig
 }
 
-func NewRepository(config model.RepositoryConfig, operatingSystemName string) Repository {
-	return Repository{operatingSystemName, config}
+func NewRepository(config model.RepositoryConfig, settings *model.Settings) Repository {
+	return Repository{settings, config}
 }
 
 func (r Repository) ID() string { return "nexus" }
@@ -24,7 +23,7 @@ func (r Repository) osName(isAny bool) string {
 	if isAny {
 		return "any"
 	}
-	return r.osname
+	return r.settings.OS
 }
 
 func (r Repository) Store(a model.Artifact, source string) error {
@@ -33,7 +32,7 @@ func (r Repository) Store(a model.Artifact, source string) error {
 		repo = "snapshots"
 	}
 	destination := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
-	log.Printf("uploading %s to %s\n", source, destination)
+	model.Printf("uploading %s to %s\n", source, destination)
 	cmd := exec.Command(
 		"curl",
 		"-u",
@@ -43,7 +42,7 @@ func (r Repository) Store(a model.Artifact, source string) error {
 		destination)
 	data, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Println(string(data))
+		model.Printf("%s", string(data))
 	}
 	return err
 }
@@ -54,7 +53,7 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 		repo = "snapshots"
 	}
 	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
-	log.Printf("downloading %s to %s\n", source, destination)
+	model.Printf("downloading %s to %s\n", source, destination)
 	cmd := exec.Command(
 		"curl",
 		"-u",
@@ -64,7 +63,7 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 		destination)
 	data, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Println(string(data))
+		model.Printf("%s", string(data))
 	}
 	return err
 }
@@ -75,7 +74,7 @@ func (r Repository) Exists(a model.Artifact) bool {
 		repo = "snapshots"
 	}
 	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
-	fmt.Println(source)
+	model.Printf("%s", source)
 	// TODO
 	return false
 }
