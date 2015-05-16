@@ -6,4 +6,4 @@ RUN mkdir -p /go/src/github.com/emicklei/artreyu-nexus
 WORKDIR /go/src/github.com/emicklei/artreyu-nexus
 ADD . /go/src/github.com/emicklei/artreyu-nexus
 
-CMD make build
+CMD make docker-build
