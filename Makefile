@@ -7,5 +7,5 @@ docker-build: clean
 	
 build: clean
 	mkdir target
-	docker build -t artreyu-builder .
+	docker build -t --no-cache artreyu-builder .
 	docker run --rm -e VERSION=$GIT_COMMIT -v `pwd`/target:/target -t artreyu-builder
