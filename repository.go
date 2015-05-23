@@ -45,7 +45,7 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 	if a.IsSnapshot() {
 		repo = "snapshots"
 	}
-	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
+	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.settings.OS, a.AnyOS))
 	model.Printf("downloading %s to %s\n", source, destination)
 	cmd := exec.Command(
 		"curl",
@@ -66,7 +66,7 @@ func (r Repository) Exists(a model.Artifact) bool {
 	if a.IsSnapshot() {
 		repo = "snapshots"
 	}
-	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
+	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.settings.OS, a.AnyOS))
 	model.Printf("%s", source)
 	// TODO
 	return false
