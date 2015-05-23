@@ -19,19 +19,12 @@ func NewRepository(config model.RepositoryConfig, settings *model.Settings) Repo
 
 func (r Repository) ID() string { return "nexus" }
 
-func (r Repository) osName(isAny bool) string {
-	if isAny {
-		return "any"
-	}
-	return r.settings.OS
-}
-
 func (r Repository) Store(a model.Artifact, source string) error {
 	repo := "releases"
 	if a.IsSnapshot() {
 		repo = "snapshots"
 	}
-	destination := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.osName(a.AnyOS)))
+	destination := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.settings.OS, a.AnyOS))
 	model.Printf("uploading %s to %s\n", source, destination)
 	cmd := exec.Command(
 		"curl",
