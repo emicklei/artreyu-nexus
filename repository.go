@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"os/exec"
+	"net/url"
 	"path/filepath"
 
 	"github.com/emicklei/artreyu/model"
@@ -26,18 +26,13 @@ func (r Repository) Store(a model.Artifact, source string) error {
 	}
 	destination := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.settings.OS, a.AnyOS))
 	model.Printf("uploading %s to %s\n", source, destination)
-	cmd := exec.Command(
-		"curl",
-		"-u",
-		fmt.Sprintf("%s:%s", r.config.User, r.config.Password),
-		"--upload-file",
-		source,
-		destination)
-	data, err := cmd.CombinedOutput()
+
+	destinationURL, err := url.Parse(destination)
 	if err != nil {
-		model.Printf("%s", string(data))
+		return fmt.Errorf("invalid http request:%v", err)
 	}
-	return err
+	destinationURL.User = url.UserPassword(r.config.User, r.config.Password)
+	return post(source, destinationURL.String())
 }
 
 func (r Repository) Fetch(a model.Artifact, destination string) error {
@@ -47,18 +42,12 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 	}
 	source := r.config.URL + filepath.Join(r.config.Path, repo, a.StorageLocation(r.settings.OS, a.AnyOS))
 	model.Printf("downloading %s to %s\n", source, destination)
-	cmd := exec.Command(
-		"curl",
-		"-u",
-		fmt.Sprintf("%s:%s", r.config.User, r.config.Password),
-		source,
-		"-o",
-		destination)
-	data, err := cmd.CombinedOutput()
+	sourceURL, err := url.Parse(source)
 	if err != nil {
-		model.Printf("%s", string(data))
+		return fmt.Errorf("invalid http request:%v", err)
 	}
-	return err
+	sourceURL.User = url.UserPassword(r.config.User, r.config.Password)
+	return get(sourceURL.String(), destination)
 }
 
 func (r Repository) Exists(a model.Artifact) bool {
