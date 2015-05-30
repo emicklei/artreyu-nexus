@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/emicklei/artreyu/model"
+	"github.com/emicklei/artreyu/transport"
 )
 
 type Repository struct {
@@ -32,7 +33,7 @@ func (r Repository) Store(a model.Artifact, source string) error {
 		return fmt.Errorf("invalid http request:%v", err)
 	}
 	destinationURL.User = url.UserPassword(r.config.User, r.config.Password)
-	return post(source, destinationURL.String())
+	return transport.HttpPostFile(source, destinationURL.String())
 }
 
 func (r Repository) Fetch(a model.Artifact, destination string) error {
@@ -47,7 +48,7 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 		return fmt.Errorf("invalid http request:%v", err)
 	}
 	sourceURL.User = url.UserPassword(r.config.User, r.config.Password)
-	return get(sourceURL.String(), destination)
+	return transport.HttpGetFile(sourceURL.String(), destination)
 }
 
 func (r Repository) Exists(a model.Artifact) bool {
