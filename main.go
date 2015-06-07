@@ -18,6 +18,8 @@ func main() {
 	cmd.Use = "artreyu-nexus"
 	cmd.Short = "archives and fetches from a Sonatype Nexus Repository"
 	cmd.PersistentPreRun = func(cmd *cobra.Command, args []string) {
+		// TODO refactor this
+		model.Verbose = settings.Verbose
 		if settings.Verbose {
 			dir, _ := os.Getwd()
 			model.Printf("working directory = [%s]", dir)
