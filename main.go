@@ -31,7 +31,7 @@ func main() {
 		return *artifact
 	}
 	getRepo := func() model.Repository {
-		return NewRepository(model.RepositoryConfigNamed(settings, "nexus"), settings)
+		return NewRepository(model.RepositoryConfigNamed(settings, settings.TargetRepository), settings)
 	}
 
 	cmd.AddCommand(command.NewArchiveCommand(getArtifact, getRepo))
