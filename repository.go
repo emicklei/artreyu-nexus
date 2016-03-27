@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"path/filepath"
 
@@ -48,7 +49,7 @@ func (r Repository) Fetch(a model.Artifact, destination string) error {
 		return fmt.Errorf("invalid http request:%v", err)
 	}
 	sourceURL.User = url.UserPassword(r.config.User, r.config.Password)
-	return transport.HttpGetFile(sourceURL.String(), destination)
+	return transport.HttpGetFile(http.DefaultClient, sourceURL.String(), destination)
 }
 
 func (r Repository) Exists(a model.Artifact) bool {
