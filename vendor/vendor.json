@@ -8,6 +8,12 @@
 			"revision": "22f80c9d277308227e925a3d308bb8a1544358c7",
 			"revisionTime": "2016-04-03T18:21:48Z",
 			"tree": true
+		},
+		{
+			"checksumSHA1": "Ww6wiSKdA8LwxoJz4DNUF+crH4g=",
+			"path": "gopkg.in/yaml.v2",
+			"revision": "f7716cbe52baa25d2e9b0d0da546fcf909fc16b4",
+			"revisionTime": "2015-12-01T16:27:45Z"
 		}
 	],
 	"rootPath": "github.com/emicklei/artreyu-nexus"
