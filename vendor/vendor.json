@@ -3,9 +3,10 @@
 	"ignore": "test",
 	"package": [
 		{
+			"origin": "github.com/emicklei/artreyu-nexus/vendor/github.com/emicklei/artreyu",
 			"path": "github.com/emicklei/artreyu",
-			"revision": "9dbfe7ad4638a4e1dcc0f0a814ceff35896f66a5",
-			"revisionTime": "2016-04-03T16:04:29Z",
+			"revision": "22f80c9d277308227e925a3d308bb8a1544358c7",
+			"revisionTime": "2016-04-03T18:21:48Z",
 			"tree": true
 		}
 	],
